@@ -4,6 +4,7 @@ import type { Mesh } from "three";
 import Header from "../components/Header";
 import { useMenu } from "../context/MenuContext";
 import Menu from "../components/Menu";
+import { CameraControls, Environment, Fisheye, PerspectiveCamera } from "@react-three/drei";
 // We need this type definition because I'm using TypeScript
 
 // 🚨 This is a React component that will render a 3D cube mesh (object) inside the scene (here Canvas React Component includes the scene)
@@ -45,25 +46,31 @@ const Basic = () => {
     <div style={{ height: "100vh" }}>
       <Menu isOpen={isOpen} closeMenu={() => setIsOpen(false)} />
       <Header absolute={true} openMenu={() => setIsOpen(true)}/>
-      <Canvas camera={{ position: [0, 0, 6], fov: 60 }}>
+      <Canvas camera={{ fov: 60 }}>
       {/* 
       Creates 3D canvas here
       Camera position is [x, y, z] axis. So in this case, the camera backs away from origin
       "fov" is field of view. Usually 45-75
       */}
-        <ambientLight intensity={0.5} />
-        {/* 
-        This is ambient light that lights up evetything evenly.
-        Without this, the bottom side of the object gets completely dark.
-        */}
-        <directionalLight position={[3, 3, 3]} intensity={1} />
-        {/* 
-        This is a directional light like sunlight shining from a direction.
-        position is also [x, y, z] axis. And the light is positioned there in space and shines towards the object naturally
-        */}
+        {/* <Fisheye zoom={0}> */}
+          <CameraControls minPolarAngle={0} maxPolarAngle={Math.PI / 1.6} />
+          {/* This one enables user to interact with camera angle */}
+          <ambientLight intensity={0.5} />
+          {/* 
+          This is ambient light that lights up evetything evenly.
+          Without this, the bottom side of the object gets completely dark.
+          */}
+          <directionalLight position={[3, 3, 3]} intensity={1} />
+          {/* 
+          This is a directional light like sunlight shining from a direction.
+          position is also [x, y, z] axis. And the light is positioned there in space and shines towards the object naturally
+          */}
+          <Environment preset="sunset" background blur={1} />
+          <SpinningBox />
+          <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+          {/* Set default camera position */}
+        {/* </Fisheye> */}
 
-        {/* Your “Hello World” object */}
-        <SpinningBox />
       </Canvas>
     </div>
   )
