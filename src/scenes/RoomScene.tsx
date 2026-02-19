@@ -7,6 +7,11 @@ import { useSpring, a } from '@react-spring/three'
 // 👇 Take this "level" piece out of the model and place it as a component.
 export const Level:React.FC = () => {
   const { nodes } = useGLTF('/level-react-draco.glb')
+  console.log(
+    Object.entries(nodes)
+      .filter(([_, obj]) => obj.type === "Mesh")
+      .map(([name]) => name)
+  );
   const levelNodes = nodes.Level as THREE.Mesh
   // Loads 3D model file here. nodes is an object containing named meshes from the file.
   return <mesh geometry={levelNodes.geometry} material={levelNodes.material} position={[-0.38, 0.69, 0.62]} rotation={[Math.PI / 2, -Math.PI / 9, 0]} />
@@ -81,7 +86,7 @@ export const Camera = () => {
 export const Cactus = () => {
   const { nodes, materials } = useGLTF('/level-react-draco.glb')
   const cactusNodes = nodes.Cactus as THREE.Mesh
-  const cactusMaterials = materials.Cactus as THREE.Material
+  const cactusMaterials = materials.Cactus as THREE.MeshStandardMaterial
   return (
     <mesh geometry={cactusNodes.geometry} position={[-0.42, 0.51, -0.62]} rotation={[Math.PI / 2, 0, 0]}>
       <MeshWobbleMaterial factor={0.4} map={cactusMaterials.map} />
